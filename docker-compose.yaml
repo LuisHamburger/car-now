@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  carnow:
+    depends_on:
+      - db
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: carnow-docker
+    container_name: carnow-api
+    restart: always
+    ports:
+      - "${PORT}:3000"
+    environment:
+      WOMPI_API: ${WOMPI_API}
+      PUBLIC_KEY: ${PUBLIC_KEY}
+      PRIVATE_KEY: ${PRIVATE_KEY}
+      DATABASE: ${DATABASE}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+
+
+  db:
+    container_name: carnow-db
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: "${DB_USERNAME}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+      POSTGRES_DB: ${DATABASE}
+    ports:
+      - "${DB_PORT}:5432"
